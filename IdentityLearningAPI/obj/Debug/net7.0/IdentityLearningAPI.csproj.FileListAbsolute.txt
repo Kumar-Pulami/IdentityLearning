@@ -80,3 +80,4 @@ D:\IdentityLearning\IdentityLearningAPI\obj\Debug\net7.0\refint\IdentityLearning
 D:\IdentityLearning\IdentityLearningAPI\obj\Debug\net7.0\IdentityLearningAPI.pdb
 D:\IdentityLearning\IdentityLearningAPI\obj\Debug\net7.0\IdentityLearningAPI.genruntimeconfig.cache
 D:\IdentityLearning\IdentityLearningAPI\obj\Debug\net7.0\ref\IdentityLearningAPI.dll
+D:\IdentityLearning\IdentityLearningAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
