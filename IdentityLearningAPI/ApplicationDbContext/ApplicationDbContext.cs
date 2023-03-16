@@ -12,5 +12,6 @@ namespace IdentityLearningAPI.ApplicationDbContext
         }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<MeetingRoom> MeetingRooms { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
     }
 }
