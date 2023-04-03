@@ -1,0 +1,47 @@
+<div class="wrapper">
+  <div class="nav-bar" [ngClass]="toogleStatus">
+    <div class="logo-content">
+      <img class="company-logo" src="assets/images/company-logo.svg" alt="">
+      <img class="title-logo" src="assets/images/title-logo.svg" alt="">
+      <div (click)="ToogleNavBar()" class="nav-toogle-btn-content">
+        <i class="nav-toogle-btn fa-regular fa-chevron-left"></i>
+      </div>
+    </div>
+
+    <div class="thin-line">
+      <div class="line">
+      </div>
+    </div>
+
+    <div class="nav-links">
+      <div routerLink="/Dashboard"  class="nav-menu" (click)="SelectNavMenu('Dashboard')"  [ngClass]="selectedNavMenu === 'Dashboard' ? 'selected ' : '' " >
+        <i class="fa-regular fa-house"></i>
+        <label class="menu-name">Dashboard</label>
+      </div>
+
+      <div routerLink="/MeetingRoom" class="nav-menu" (click)="SelectNavMenu('MeetingRoom')"  [ngClass]="selectedNavMenu === 'MeetingRoom' ? 'selected ' : '' " >
+        <i class="fa-regular fa-screen-users"></i>
+        <label class="menu-name">Meeting Room</label>
+      </div>
+
+      <div routerLink="/BookMeetingRoom" class="nav-menu" (click)="SelectNavMenu('Booking')"  [ngClass]="selectedNavMenu === 'Booking' ? 'selected ' : '' " >
+        <i class="fa-regular fa-screen-users"></i>
+        <label class="menu-name">Booking</label>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="body">
+
+    <div class="body-header">
+      <div class="profile">
+        <i class="fa-regular fa-user"></i>
+      </div>  
+    </div>
+
+    <div class="body-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

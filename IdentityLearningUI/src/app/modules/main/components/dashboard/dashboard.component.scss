@@ -1,0 +1,36 @@
+@import 'variables';
+
+.dashboard-content{
+    display: flex;
+    flex-direction: column;
+
+    .title-content{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+
+        .title{
+            font-size: 25px;
+            font-weight: 600;
+        }
+
+        .book-btn-content{
+
+            .book-btn{
+                height: 45px;
+                border-radius: 5px;
+                color: white;
+                background-color: $primary-color;
+                border: none;
+                padding: 0 10px;
+            }
+        }
+    }
+
+    .content{
+        height: 100px;
+        width: 100px;
+        //background-color:red;
+    }
+}

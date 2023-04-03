@@ -19,7 +19,6 @@ namespace IdentityLearningAPI.Controllers
             _databaseContext = databaseContext;
         }
 
-
         [HttpPost("createMeetingRoom")]
         public IActionResult CreateMeetingRoom([FromBody] string meetingRoomName)
         {

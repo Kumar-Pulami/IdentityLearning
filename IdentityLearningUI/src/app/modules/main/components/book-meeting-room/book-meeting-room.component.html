@@ -1,0 +1,61 @@
+<div class="booking-content">
+    <span class="title">Meeting Room Booking</span>
+    
+    <div class="content">
+        <form class="form-content" [formGroup]="bookingForm">
+            <div class="form-title">
+                <span>Booking Information</span>
+                <hr>
+            </div>
+
+            <div class="row">
+                <div class="input-field">
+                    <label>Meeting Room</label>
+                    <select class="form-select" formControlName = "meetingRoomId">
+                        <option value="null" hidden selected>Please, select the meeting room.</option>
+                        <option *ngFor="let meetingRoom of meetingRoomList" value="{{meetingRoom.id}}">{{meetingRoom.name}}</option>
+                    </select>
+                    <span class="text-danger" *ngIf="bookingForm.controls['meetingRoomId'].invalid  && (bookingForm.controls['meetingRoomId'].dirty || bookingForm.controls['meetingRoomId'].touched)">
+                        {{GetErrorMessage("meetingRoomId")}}
+                    </span>
+                </div>
+                
+                <div class="input-field end-field">
+                    <label>Booking Date</label>
+                    <input type="date" class="form-control" formControlName= "bookingDate" pattern="">
+                    <span class="text-danger" *ngIf="bookingForm.controls['bookingDate'].invalid  && (bookingForm.controls['bookingDate'].dirty || bookingForm.controls['bookingDate'].touched)">
+                        {{GetErrorMessage("bookingDate")}}
+                    </span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field">
+                    <label>Start Time</label>
+                    <input type="time" class="form-control" formControlName= "startTime">
+                    <span class="text-danger" *ngIf="bookingForm.controls['startTime'].invalid  && (bookingForm.controls['startTime'].dirty || bookingForm.controls['startTime'].touched)">
+                        {{GetErrorMessage("startTime")}}
+                    </span>
+                    <span class="text-danger" *ngIf="bookingForm.errors?.['startTime']">
+                        {{GetTimeDateErrorMessage('startTime')}}
+                    </span>
+                </div>
+                
+                <div class="input-field end-field">
+                    <label>End Time</label>
+                    <input type="time" class="form-control" formControlName ="endTime">
+                    <span class="text-danger" *ngIf="bookingForm.controls['endTime'].invalid  && (bookingForm.controls['endTime'].dirty || bookingForm.controls['endTime'].touched)">
+                        {{GetErrorMessage("endTime")}}
+                    </span>
+                    <span class="text-danger" *ngIf="bookingForm.errors?.['startTime']">
+                        {{GetTimeDateErrorMessage('startTime')}}
+                    </span>
+                </div>
+            </div>
+
+            <div class="book-btn-content">
+                <input (click)="Book()" type="button" class="book-btn" value="Book" >
+            </div>
+        </form>  
+    </div>
+</div>

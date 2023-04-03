@@ -1,0 +1,129 @@
+@import 'variables';
+
+.content{
+    background-color: whitesmoke;
+    min-height: 100vh;
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+
+    .logo-content{
+    
+        .logo{
+            height: 40px;
+            width: 227px;
+        }
+    }
+
+    .form-content{
+        width: 500px;
+        background-color: white;
+        border: $thin-black-boarder;
+        border-radius: 10px;
+        box-shadow: $grey-box-shadow;
+        padding: 10px 0 10px 0;
+        
+        .form{
+            height: inherit;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+            
+            .signUp{
+                font-size: xx-large;
+                font-weight: 600;
+                text-decoration: underline;
+                text-align: center;
+                margin-top: 10px;
+                margin-bottom: 5px;
+                color: $primary-color;
+            }
+
+            .input-field{
+                display: flex;
+                flex-direction: column;
+                padding: 0 60px 0 60px;
+                margin-top: 10px;
+
+                label{
+                    font-size: 0.9em;
+                    color: black;
+                    padding-left: 2px;
+                }
+
+                input{
+                    margin-top: 2px;
+                    height: 40px;
+                    font-size: 0.9em;
+                    padding: 0 50px 0 10px;
+                    border: 2px solid gray;
+                    border-radius: 5px;
+                }         
+
+                input:focus{
+                    border: none;
+                    outline: 2px solid $primary-color;
+                } 
+                .fa-regular{
+                    position: relative;
+                    left: 92%;
+                    top: -25px;
+                    margin-bottom: -17.5px;
+                }
+                .fa-regular:hover{
+                    cursor: pointer;
+                }
+
+                .text-danger{
+                    font-size: 0.9em;
+                }
+            }
+            
+            .button-content{
+                width: 100%;
+                margin-top: 25px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                
+                .try-again{
+                    width: 100%;
+                    color: red;
+                    text-align: center;
+                    margin-top: -7.5px;
+                    margin-bottom: 15px;
+                }
+                          
+                .singup-btn{
+                    margin-top: 30px;
+                    background-color: $primary-color;
+                }
+
+                .signin-btn{
+                    border: none;
+                    width: calc(100% - 220px);
+                    background-color: white;
+                    margin-top: 15px;
+                    margin-bottom: 15px;
+                }
+
+                .signin-btn:hover{
+                    font-weight: 500;
+                    color: $primary-color;  
+                    text-decoration: underline;
+                }
+
+                .button{
+                    width: calc(100% - 120px);
+                    height: 45px;
+                    margin: 0 60px 0 60px; 
+                    border: none;
+                    border-radius: 5px;
+                    color: white;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,60 @@
+<div class="content">
+  <div class="logo-content"></div>
+  <img src="assets/images/company-logo.svg" alt="">
+  <div class="form-content">
+    
+    <h2>Sign In</h2>
+    <form class="form" [formGroup]="signInFormGroup">
+      <div class="input-field">
+        <input type="email" formControlName="userName" placeholder="Enter your username">
+        <label for="">Username</label>
+        <i class="fa-regular fa-envelope"></i>
+      </div>
+      
+      <div *ngIf="signInFormGroup.controls['userName'].invalid  && (signInFormGroup.controls['userName'].dirty || signInFormGroup.controls['userName'].touched)">
+        <span class="error-message">
+          Please, enter your username.
+        </span>
+      </div>
+      
+      <div class="input-field">
+        <input class="password" type="password" formControlName = "password" placeholder="Enter your password">
+        <label for="">Password</label>
+        <i class="fa-regular fa-lock"></i>
+      </div>
+
+      <div *ngIf="signInFormGroup.controls['password'].invalid  && (signInFormGroup.controls['password'].dirty || signInFormGroup.controls['password'].touched)">
+        <span class="error-message">
+          Please, enter your password.
+        </span>
+      </div>
+
+      <div class="invalid-credentials" *ngIf="invalidCredentials">
+        <span class="error-message">
+          Incorrect Username/Password.
+        </span>
+        <span class="error-message">
+          Try Again!
+        </span>
+      </div>
+
+      <div class="rememberme-forgot-section">
+        <div class="rememberme-section">
+          <input class="rememberme-checkbox" type="checkbox" formControlName="rememberMe">
+          <label for="">Remember Me</label>         
+        </div>
+        
+        <div class="forgot-section">
+          <a routerLink="/ForgotPassword">Forgot Password?</a>
+        </div>
+      </div>
+        
+      <input type="button" (click)="SignIn()" class="signin-button" value="Sign In"/>
+      <div class="register-section">
+        <label>Not a member? <a routerLink="/SignUp">Sign up now</a></label>
+      </div>
+    </form>
+
+  </div>
+  <div></div>
+</div>

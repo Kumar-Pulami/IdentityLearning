@@ -1,6 +1,4 @@
-﻿using System.CodeDom.Compiler;
-using System.ComponentModel.DataAnnotations;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -8,16 +6,20 @@ using System.Text;
 using System.Text.RegularExpressions;
 using IdentityLearningAPI.ApplicationDbContext;
 using IdentityLearningAPI.Configurations.JwtConfig;
+using IdentityLearningAPI.Enums;
+using IdentityLearningAPI.Interfaces;
 using IdentityLearningAPI.Models;
+using IdentityLearningAPI.Models.DTO;
 using IdentityLearningAPI.Models.DTO.Request;
 using IdentityLearningAPI.Models.DTO.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Bcpg.OpenPgp;
 
 namespace IdentityLearningAPI.Controllers
 {
@@ -29,46 +31,43 @@ namespace IdentityLearningAPI.Controllers
         private readonly JwtOptions _jwtOptions;
         private readonly UserManager<User> _userManager;
         private readonly ApplicationDatabaseContext _dbContext;
-        public AuthenticationController(IOptions<JwtOptions> jwtOptions, UserManager<User> user, SignInManager<User> signInManager, ApplicationDatabaseContext dbContext)
-        {
+        private readonly IMailSender _mailSenderService;
+        public AuthenticationController
+        (
+            IOptions<JwtOptions> jwtOptions, 
+            UserManager<User> user,
+            ApplicationDatabaseContext dbContext,
+            IMailSender mailSenderService
+        ){
             _jwtOptions = jwtOptions.Value;
             _userManager = user;
             _dbContext = dbContext;
+           _mailSenderService = mailSenderService;
         }
 
         [HttpPost("signIn")]
         public async Task<IActionResult> SignIn([FromBody] SignIn userCredentials)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    var user = await _userManager.FindByEmailAsync(userCredentials.UserName);
+                var user = await _userManager.FindByEmailAsync(userCredentials.UserName);
                     
-                    if (user != null)
-                    {
-                        var correct = await _userManager.CheckPasswordAsync(user, userCredentials.Password);
+                if (user != null)
+                {
+                    var correct = await _userManager.CheckPasswordAsync(user, userCredentials.Password);
 
-                        if (correct)
-                        {
-                            return Ok(await GenerateToken(user));
-                        }
+                    if (correct)
+                    {
+                        return Ok(await GenerateToken(user));
                     }
                 }
-                return BadRequest(error: "Invalid login credentials");
-
             }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-
+            return BadRequest(error: "Invalid login credentials");
         }
 
 
         [HttpPost("registerUser")]
-        public async Task<IActionResult> RegisterUser([FromBody] UserRegister userInfo)
+        public async Task<IActionResult> RegisterUser([FromBody] RegisterNewUserDTO userInfo)
         {
             if (ModelState.IsValid)
             {
@@ -138,10 +137,10 @@ namespace IdentityLearningAPI.Controllers
 
                     var encodedClaims = tokenValidationResult.Claims;
 
-                    if (UnixEpochTimeToDateTime(long.Parse(encodedClaims.FirstOrDefault(x => x.Key == JwtRegisteredClaimNames.Exp).Value.ToString())) > currentDateTime)
-                    {
-                        return BadRequest(ReturnInvalidTokenResponse());
-                    }
+                    //if (UnixEpochTimeToDateTime(long.Parse(encodedClaims.FirstOrDefault(x => x.Key == JwtRegisteredClaimNames.Exp).Value.ToString())) > currentDateTime)
+                    //{
+                    //    return BadRequest(ReturnInvalidTokenResponse());
+                    //}
 
                     User embeddedUser = new User()
                     {
@@ -208,11 +207,11 @@ namespace IdentityLearningAPI.Controllers
 
 
         [HttpPost("inviteNewUserByEmail")]
-        public async Task<IActionResult> InviteNewUserByEmail([FromBody] [EmailAddress] string email)
+        public async Task<IActionResult> InviteNewUserByEmail([FromBody] InviteNewUserDTO newUser)
         {
 
             string emailAddressRegex = @"^[^@\s]+@[^@\s]+\.(com|net|org|gov|io|edu)$";
-            if (Regex.IsMatch(email, emailAddressRegex, RegexOptions.IgnoreCase))
+            if (!Regex.IsMatch(newUser.Email, emailAddressRegex, RegexOptions.IgnoreCase))
             {
                 return BadRequest(new Response
                 {
@@ -223,7 +222,124 @@ namespace IdentityLearningAPI.Controllers
                     }
                 });
             }
+
+            User existingUser = await _userManager.FindByEmailAsync(newUser.Email);
+            if (existingUser != null)
+            {
+                return BadRequest(new Response
+                {
+                    Success = false,
+                    Error = new List<string>
+                    {
+                        "Email already exists."
+                    }
+                });
+            }
+            await _mailSenderService.SendNewUserInvitationMail(newUser.Name, newUser.Email, "lksjdfasdf");
+
             return Ok();
+        }
+
+
+        [HttpGet("checkUniqueEmail")]
+        public async Task<IActionResult> CheckUniqueEmail(string email)
+        {   
+            User user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
+
+
+        [HttpGet("forgotPassword")]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            User existingUser = await _userManager.FindByEmailAsync(email);
+            if (existingUser == null)
+            {
+                return Ok();
+            }
+            else
+            {
+                string token = await _userManager.GeneratePasswordResetTokenAsync(existingUser);
+                UserToken? forgotUserToken = await _dbContext.UserTokens.FirstOrDefaultAsync(x => x.UserId == existingUser.Id && x.TokenType == TokenType.ForgotPassword);
+
+
+                if (forgotUserToken == null)
+                {
+                    UserToken newToken = new UserToken()
+                    {
+                        UserId = existingUser.Id,
+                        Token = token,
+                        ExpiryDateTime = DateTime.UtcNow.AddMinutes(5),
+                        TokenType = TokenType.ForgotPassword,
+                        IsUsed = false
+                    };
+                    _dbContext.UserTokens.Add(newToken);
+                    await _dbContext.SaveChangesAsync();
+                }
+                else
+                {
+                    forgotUserToken.Token = token;
+                    forgotUserToken.ExpiryDateTime = DateTime.UtcNow.AddMinutes(5);
+                    forgotUserToken.IsUsed = false;
+                    _dbContext.UserTokens.Update(forgotUserToken);
+                    await _dbContext.SaveChangesAsync();
+                }
+                await _mailSenderService.SendForgotPasswordMail(existingUser, token);
+                return Ok();
+            }
+        }
+
+
+        [HttpGet("verifyUserToken")]
+        public async Task<IActionResult> VerifyUserTokens(string email, string token, string tokenType)
+        {
+            TokenType tokenTypeInEnum;
+            Enum.TryParse<TokenType>(tokenType, out tokenTypeInEnum);
+            if (await ValidateToken(email,token, tokenTypeInEnum))
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+
+        [HttpPost("setNewPassword")]
+        public async Task<IActionResult> SetNewPassword([FromBody] SetPasswordDTO newPassword)
+        {
+            if (ModelState.IsValid)
+            {
+                bool IsValid = await ValidateToken(newPassword.Email, newPassword.Token, TokenType.ForgotPassword);
+                if (IsValid)
+                {
+                    User? existingUser = await _userManager.FindByEmailAsync(newPassword.Email);
+                    await _userManager.RemovePasswordAsync(existingUser);
+                    await _userManager.AddPasswordAsync(existingUser, newPassword.Password);
+                    await _userManager.UpdateAsync(existingUser);
+
+                    newPassword.Token = newPassword.Token.Replace(" ", "+");
+                    UserToken? existingUserToken = await _dbContext.UserTokens.FirstOrDefaultAsync(x => x.UserId == existingUser.Id && x.Token == newPassword.Token );
+                    existingUserToken.IsUsed = true;
+                    _dbContext.UserTokens.Update(existingUserToken);
+                    _dbContext.SaveChanges();
+
+                    return Ok(new Response
+                    {
+                        Success = true,
+                    });
+                }
+            }
+            return BadRequest(new Response()
+            {
+                Success = false,
+                Error = new List<string> { "Invalid Token." }
+            });
         }
 
 
@@ -302,5 +418,32 @@ namespace IdentityLearningAPI.Controllers
                 }
             };
         }
+
+
+        private async Task<bool> ValidateToken(string email, string token, TokenType tokenType) {
+            User? existingUser = await _userManager.FindByEmailAsync(email);
+            if (existingUser == null)
+            {
+                return false;
+            }
+            else
+            {
+                //DateTime test = DateTime.UtcNow;
+                token = token.Replace(" ", "+");
+                UserToken? userToken = await _dbContext.UserTokens.FirstOrDefaultAsync(x => 
+                    x.UserId == existingUser.Id && 
+                    x.Token == token &&
+                    x.ExpiryDateTime > DateTime.UtcNow &&
+                    x.IsUsed == false &&
+                    x.TokenType == tokenType
+                );
+                if (userToken == null)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
     }
 }

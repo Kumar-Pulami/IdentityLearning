@@ -1,7 +1,10 @@
 using System.Text;
 using IdentityLearningAPI.ApplicationDbContext;
 using IdentityLearningAPI.Configurations.JwtConfig;
+using IdentityLearningAPI.Configurations.MailConfig;
+using IdentityLearningAPI.Interfaces;
 using IdentityLearningAPI.Models;
+using IdentityLearningAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JwtConfig"));
+builder.Services.Configure<MailConfig>(builder.Configuration.GetSection("MailConfig"));
+builder.Services.AddTransient<IMailSender, MailSenderService>();
 
 builder.Services.AddDbContext<ApplicationDatabaseContext>(option =>
         option.UseSqlServer(builder.Configuration.GetConnectionString("defaultConnectionString"))
@@ -19,6 +24,7 @@ builder.Services.AddDbContext<ApplicationDatabaseContext>(option =>
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
     options.SignIn.RequireConfirmedAccount = true)
+    .AddDefaultTokenProviders()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDatabaseContext>();
 
@@ -38,11 +44,22 @@ builder.Services.AddAuthentication(options =>
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ValidateIssuerSigningKey = true,
-                ValidateLifetime = true,
+                ValidateLifetime = false,
                 ClockSkew = TimeSpan.Zero
             };
         }
     );
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200")
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -85,7 +102,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 

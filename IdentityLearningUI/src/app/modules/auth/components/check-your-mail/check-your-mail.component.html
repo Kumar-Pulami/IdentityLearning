@@ -1,0 +1,21 @@
+<div class="main-content">
+    <div class="logo-content">
+        <img class="logo" src="assets/images/company-logo.svg" alt="">
+    </div>
+    <div class="check-your-mail-content">   
+        <div class="content">
+            <label class="check-your-mail-label">Check Your Mail</label>
+            <label class="instruction-label">We have sent a password resent link to</label>
+            <label class="email-label">{{email}}</label>
+            <input type="button" (click)="OpenMail()" class="resend-btn custom-button" value="Open mail app" />
+            <div class="resend-label">
+                <label class="not-receive-label">Didn't receive the mail?&nbsp;</label><label class="resend-link" (click)="Resend()">Click to resend</label>
+            </div>
+            <span class="text-danger errorMesssage">
+                {{errorMesssage}}
+            </span>
+            <button routerLink="/SignIn" class="signin-btn custom-button"><i class="fa-regular fa-arrow-left"></i> Back to Sign In</button>
+        </div>
+    </div>
+    <div class="blank-content"></div>
+</div>

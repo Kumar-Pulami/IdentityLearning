@@ -1,0 +1,99 @@
+@import 'variables';
+
+.main-content{
+    background-color: whitesmoke;
+    min-height: 100vh;
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+
+    .logo-content{
+    
+        .logo{
+            height: 50px;
+            width: 330px;
+        }
+    }
+
+    .check-your-mail-content{
+        width: 500px;
+        background-color: white;
+        border: $thin-black-boarder;
+        border-radius: 10px;
+        box-shadow: $grey-box-shadow;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        
+        .content{
+            margin: 40px 0 50px 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0 60px 0 60px;
+
+            .check-your-mail-label{
+                font-size: 25px;
+                font-weight: 600;
+                color: $primary-color;
+                text-decoration: underline;
+            }
+            
+            .instruction-label{
+                font-size: 17px;
+                margin-top: 10px;
+                color: gray;
+            }
+            
+            .email-label{
+                font-size: 17px;
+                font-weight: 600;
+            }
+
+            .resend-label{
+                margin-top: 20px;
+            }
+
+            .resend-link:hover{
+                cursor: pointer;
+                color: $primary-color;
+                font-weight: 600;
+                text-decoration: underline;
+            }
+            
+            .custom-button{
+                margin-top: 30px;
+                width: 100%;
+                height: 40px;
+                border: none;
+            }
+
+            .resend-btn{
+                background-color: $primary-color;
+                border-radius: 5px;
+                color: white;
+            }
+
+            .errorMesssage{
+                margin-top: 10px;
+            }
+
+            .signin-btn{
+                width: calc(100% - 220px);
+                background-color: white;
+                margin-top: 15px; 
+            }
+
+            .signin-btn:hover{
+                font-weight: 500;
+                color: $primary-color;
+                text-decoration: underline;
+            }
+        }
+    }
+}

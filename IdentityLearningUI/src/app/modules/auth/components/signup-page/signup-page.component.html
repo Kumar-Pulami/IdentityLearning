@@ -1,0 +1,64 @@
+<div class="content">
+    <div class="logo-content">
+        <img class="logo" src="assets/images/company-logo.svg" alt="">
+    </div>
+    <div class="form-content">
+        <form class="form" [formGroup]="signUpForm">
+            <label class="signUp">Sign Up</label>
+            <div class="input-field">
+                <label for="name">Name</label>
+                <input type="text" formControlName = 'name' placeholder="Enter your name">
+                <span class="text-danger" *ngIf="signUpForm.controls['name'].invalid  && (signUpForm.controls['name'].dirty || signUpForm.controls['name'].touched)">
+                    {{GetErrorMessage("name")}}
+                </span>
+            </div>
+            <div class="input-field">
+                <label for="email-address">Email Address</label>
+                <input type="text" formControlName = 'emailAddress' placeholder="Enter your email address">
+                <span class="text-danger" *ngIf="signUpForm.controls['emailAddress'].invalid  && (signUpForm.controls['emailAddress'].dirty || signUpForm.controls['emailAddress'].touched)">
+                    {{GetErrorMessage("emailAddress")}}
+                </span>
+            </div>
+            <div class="input-field">
+                <label for="phone-number">Contact Number</label>
+                <input type="text" formControlName = 'contactNumber' placeholder="Enter your contact number">
+                <span class="text-danger" *ngIf="signUpForm.controls['contactNumber'].invalid  && (signUpForm.controls['contactNumber'].dirty || signUpForm.controls['contactNumber'].touched)">
+                    {{GetErrorMessage("contactNumber")}}
+                </span>
+            </div>
+            <div class="input-field">
+                <label for="email-address">Password</label>
+                <input [type]= "hidePw ? 'password' : 'text'" formControlName = 'password' placeholder="Enter your password">
+                <i (click) = "ToogleEyePw()" [ngClass]="!hidePw ? 'fa-eye' : 'fa-eye-slash '" class="fa-regular"></i>
+                <span class="text-danger" *ngIf="signUpForm.controls['password'].invalid  && (signUpForm.controls['password'].dirty || signUpForm.controls['password'].touched)">
+                    {{GetErrorMessage("password")}}
+                </span>
+                <span class="text-danger" *ngIf="signUpForm.controls['password'].invalid  && (signUpForm.controls['password'].dirty || signUpForm.controls['password'].touched) && signUpForm.controls['password'].errors?.['invalid']">
+                    Password must contain 9 character including each one upper case, lower case, numeric and special character.
+                </span>
+            </div>
+            <div class="input-field">
+                <label for="email-address">Confirm Password</label>
+                <input [type]= "hideCfPw ? 'password' : 'text'" formControlName = 'confirmPassword' placeholder="Re-type your password to confirm">
+                <i (click) = "ToogleEyeCfPw()" [ngClass]="!hideCfPw ? 'fa-eye' : 'fa-eye-slash '" class="fa-regular"></i>
+                <span class="text-danger"*ngIf="signUpForm.controls['confirmPassword'].invalid  && (signUpForm.controls['confirmPassword'].dirty || signUpForm.controls['confirmPassword'].touched)">
+                    Re-type your password to confirm.
+                </span>
+                <span class="text-danger" *ngIf="signUpForm.errors && (signUpForm.controls['password'].dirty || signUpForm.controls['password'].touched) && signUpForm.controls['confirmPassword'].valid && (signUpForm.controls['confirmPassword'].dirty || signUpForm.controls['confirmPassword'].touched)">
+                    {{signUpForm.errors['pwNotMatch']}}
+                </span>
+            </div>
+            <div class="button-content">
+                <div class="try-again" *ngIf="signUpForm.errors?.['error']">
+                    <span>
+                        Something went wrong!. Try again.
+                    </span>
+                </div>
+                <input class="singup-btn button" (click)="SignUp()" type="button" value="Sign Up">
+
+                <button routerLink="/SignIn" class="signin-btn custom-button"><i class="fa-regular fa-arrow-left"></i> Back to Sign In</button>
+            </div>
+        </form>
+    </div>
+    <div class="blank-content"></div>
+</div>

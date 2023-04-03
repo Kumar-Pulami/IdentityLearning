@@ -1,0 +1,87 @@
+@import 'variables';
+
+.booking-content{
+    display: flex;
+    flex-direction: column;
+
+    .title{
+        font-size: 25px;
+        font-weight: 600;
+        margin-top: 25px;
+    }
+
+    .content{
+        margin-top: 20px;
+        border-radius: 5px;
+        background-color: #fff;
+        border: $thin-black-boarder;
+        border-radius: 10px;
+        box-shadow: $content-box-shadow;
+        padding: 40px 40px;
+
+        .form-content{
+            .form-title{
+
+                span{
+                    font-size: 18px;
+                    font-weight: 60
+                }
+
+                hr{
+                    margin-top: 5px;
+                }
+
+            }
+
+            .row{
+                margin-top: 25px;
+                display: flex;
+
+                .input-field{
+                    display: flex;
+                    flex-direction: column;
+                    width: 50%;
+                    
+                    input, select
+                    {
+                        margin-top: 5px;
+                    }
+                }
+            }
+
+            .book-btn-content{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-top: 50px;
+
+                .book-btn{
+                    width: 45%;
+                    height: 45px;                  
+                    background-color: $primary-color;
+                    border: none;
+                    border-radius: 5px;
+                    color: white;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 840px) {
+
+    .booking-content 
+    .content
+    .form-content
+    .row{
+        flex-direction: column;
+        
+        .input-field{
+            width: 100%;
+        }
+
+        .end-field{
+            margin-top: 25px;
+        }
+    }
+}
