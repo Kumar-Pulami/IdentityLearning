@@ -4990,11 +4990,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\IdentityLearning\\IdentityLearningAPI\\IdentityLearningAPI.csproj",
+      "projectUniqueName": "D:\\Learning\\IdentityLearning\\IdentityLearningAPI\\IdentityLearningAPI.csproj",
       "projectName": "IdentityLearningAPI",
-      "projectPath": "D:\\IdentityLearning\\IdentityLearningAPI\\IdentityLearningAPI.csproj",
+      "projectPath": "D:\\Learning\\IdentityLearning\\IdentityLearningAPI\\IdentityLearningAPI.csproj",
       "packagesPath": "C:\\Users\\kumar\\.nuget\\packages\\",
-      "outputPath": "D:\\IdentityLearning\\IdentityLearningAPI\\obj\\",
+      "outputPath": "D:\\Learning\\IdentityLearning\\IdentityLearningAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\kumar\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -5087,7 +5087,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.103\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }

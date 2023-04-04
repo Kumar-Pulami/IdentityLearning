@@ -244,8 +244,8 @@ namespace IdentityLearningAPI.Controllers
         [HttpGet("checkUniqueEmail")]
         public async Task<IActionResult> CheckUniqueEmail(string email)
         {   
-            User user = await _userManager.FindByEmailAsync(email);
-            if (user == null)
+            User? user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
             {
                 return BadRequest();
             }

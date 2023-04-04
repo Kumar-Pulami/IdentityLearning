@@ -23,7 +23,7 @@ namespace IdentityLearningAPI.ApplicationDbContext
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<Booking> Bookings { get; set; }
+        public DbSet<MeetingRoomBooking> MeetingRoomBookings { get; set; }
         public DbSet<MeetingRoom> MeetingRooms { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<UserToken> UserTokens { get; set; }

@@ -22,30 +22,6 @@ namespace IdentityLearningAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("IdentityLearningAPI.Models.Booking", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("MeetingId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MeetingId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Bookings");
-                });
-
             modelBuilder.Entity("IdentityLearningAPI.Models.MeetingRoom", b =>
                 {
                     b.Property<int>("Id")
@@ -62,6 +38,37 @@ namespace IdentityLearningAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MeetingRooms");
+                });
+
+            modelBuilder.Entity("IdentityLearningAPI.Models.MeetingRoomBooking", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("BookedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MeetingRoomId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeetingRoomId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MeetingRoomBookings");
                 });
 
             modelBuilder.Entity("IdentityLearningAPI.Models.RefreshToken", b =>
@@ -341,11 +348,11 @@ namespace IdentityLearningAPI.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("IdentityLearningAPI.Models.Booking", b =>
+            modelBuilder.Entity("IdentityLearningAPI.Models.MeetingRoomBooking", b =>
                 {
                     b.HasOne("IdentityLearningAPI.Models.MeetingRoom", "MeetingRoom")
                         .WithMany()
-                        .HasForeignKey("MeetingId")
+                        .HasForeignKey("MeetingRoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

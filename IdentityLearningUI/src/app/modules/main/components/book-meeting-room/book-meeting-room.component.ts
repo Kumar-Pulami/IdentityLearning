@@ -7,6 +7,7 @@ import { DatePipe } from '@angular/common';
 import { GetValidationErrorMessage } from 'src/app/modules/auth/services/customValidators/getValidationErrorMessage';
 import { EmptyFormValidator } from 'src/app/modules/auth/services/customValidators/emptyFormValidator';
 import { BookingDateValidator, DateAndTimeValidator, EndTimeValidator, SelecteMeetingRoomValidator, StartTimeValidator } from '../../services/customValidators/bookMeetingRoomCustomValidators';
+import { localHostUrl } from 'src/app/constant';
 
 @Component({
   selector: 'app-book-meeting-room',
@@ -47,8 +48,8 @@ export class BookMeetingRoomComponent {
     })
 
     let currentDateTime: Date = new Date();
-    this.minDate = this.datePipe.transform(currentDateTime, 'mm/MM/yyyy');
-    this.maxDate = this.datePipe.transform(this.GetMaxDate(currentDateTime), 'mm/MM/yyyy');
+    this.minDate = this.datePipe.transform(currentDateTime, 'yyyy-MM-dd');
+    this.maxDate = this.datePipe.transform(this.GetMaxDate(currentDateTime), 'yyyy-MM-dd');    
   }
 
 
@@ -57,7 +58,7 @@ export class BookMeetingRoomComponent {
     if(this.bookingForm.invalid){
       EmptyFormValidator(this.bookingForm);
     }else{
-
+      let bookMeetingApiUrl = localHostUrl + "Authentication/" 
     }
   }
   

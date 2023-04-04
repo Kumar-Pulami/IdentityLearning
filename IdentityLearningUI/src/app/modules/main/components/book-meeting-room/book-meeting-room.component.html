@@ -22,7 +22,7 @@
                 
                 <div class="input-field end-field">
                     <label>Booking Date</label>
-                    <input type="date" class="form-control" formControlName= "bookingDate" pattern="">
+                    <input type="date" class="form-control" formControlName= "bookingDate" min="{{minDate}}" max="{{maxDate}}" value="{{minDate}}">
                     <span class="text-danger" *ngIf="bookingForm.controls['bookingDate'].invalid  && (bookingForm.controls['bookingDate'].dirty || bookingForm.controls['bookingDate'].touched)">
                         {{GetErrorMessage("bookingDate")}}
                     </span>
@@ -47,8 +47,8 @@
                     <span class="text-danger" *ngIf="bookingForm.controls['endTime'].invalid  && (bookingForm.controls['endTime'].dirty || bookingForm.controls['endTime'].touched)">
                         {{GetErrorMessage("endTime")}}
                     </span>
-                    <span class="text-danger" *ngIf="bookingForm.errors?.['startTime']">
-                        {{GetTimeDateErrorMessage('startTime')}}
+                    <span class="text-danger" *ngIf="bookingForm.errors?.['endTime']">
+                        {{GetTimeDateErrorMessage('endTime')}}
                     </span>
                 </div>
             </div>

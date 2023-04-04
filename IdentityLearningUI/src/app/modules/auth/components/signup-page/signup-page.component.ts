@@ -16,7 +16,6 @@ import { ContactNumberValidator, EmailValidator, MatchPasswordValidator, NameVal
 })
 
 export class SignupPageComponent {
-
   hidePw: boolean = true;
   hideCfPw: boolean = true;
   signUpForm: FormGroup;
@@ -52,7 +51,7 @@ export class SignupPageComponent {
           this.signUpApiService.SignUp(signUpData).subscribe({
             next: (token: AuthResponse) =>{
               this.authService.OnSignUp(token);
-              this.router.navigate(['Main/Dashboard']);
+              this.router.navigate(['/Dashboard']);
             },
             error: () => {
               this.signUpForm.get('emailAddress')?.setErrors({msg: "Email address already used."});

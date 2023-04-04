@@ -19,6 +19,7 @@ namespace IdentityLearningAPI.Controllers
             _databaseContext = databaseContext;
         }
 
+
         [HttpPost("createMeetingRoom")]
         public IActionResult CreateMeetingRoom([FromBody] string meetingRoomName)
         {
@@ -44,12 +45,14 @@ namespace IdentityLearningAPI.Controllers
             return BadRequest(error: "MeetingRoom Already Exists.");
         }
 
+
         [HttpGet("getAllMeetingRooms")]
         public IActionResult GetAllMeetingRooms()
         {
             var meetingRooms = _databaseContext.MeetingRooms.ToList();
             return Ok(meetingRooms);
         }
+
 
         [HttpGet("getMeetingRoomById")]
         public IActionResult GetMeetingRoom(int meetingRoomId)
@@ -64,6 +67,13 @@ namespace IdentityLearningAPI.Controllers
                 return NoContent();
             }
             return BadRequest(error: "Invalid parameter");
+        }
+
+
+        [HttpPost("bookMeetingRoom")]
+        public async Task<IActionResult> BookMeetingRoom()
+        {
+            return Ok();
         }
     }
 }

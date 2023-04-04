@@ -33,8 +33,11 @@ export function StartTimeValidator(): ValidatorFn {
       }
 
       let startTime = Convert24hrTimeStringToDateTime(formControlValue);
+      console.log(startTime);
+
       
-      if(startTime.getHours() < 10 || (startTime.getHours() > 15 && startTime.getMinutes() > 30 )){
+      
+      if(startTime.getHours() < 10 || (startTime.getHours() === 15 && startTime.getMinutes() > 30 ) || startTime.getHours() > 15){
         return {msg: "Booking start time start from 10 AM - 3:30 PM."}
       }
       return null;
@@ -46,12 +49,12 @@ export function EndTimeValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const formControlValue = control.value;      
       if(formControlValue === null  || formControlValue === undefined){
-        return {msg: "Please, enter the time."}
+        return {msg: "Please, enter the end time."}
       }
 
       let endTime = Convert24hrTimeStringToDateTime(formControlValue);
       
-      if((endTime.getHours() < 9 && endTime.getMinutes() < 30) || endTime.getHours() > 16){
+      if((endTime.getHours() === 10 && endTime.getMinutes() < 30) || endTime.getHours() < 10 ||endTime.getHours() > 16 || (endTime.getHours() === 16 && endTime.getMinutes() > 0)){
         return {msg: "Booking end time start from 10:30 AM - 4 PM."}
       }
       return null;
@@ -70,31 +73,24 @@ export const DateAndTimeValidator: ValidatorFn = (control: AbstractControl): Val
       flag = true;
     }
 
+    if(!control.get('bookingDate')?.valid || !control.get('startTime')?.valid || !control.get('endTime')?.valid ){
+      flag = true;
+    }
     
     if(!flag){
-
-
-        let bookedDate: Date = new Date(bookedDateValue);
-        let startTime: Date = Convert24hrTimeStringToDateTime(startTimeValue);
-        let endTime: Date = Convert24hrTimeStringToDateTime(endTimeValue);
-
-
-        console.log("Start Time" + startTime);
-        console.log("End Time" + endTime);
-        console.log("Booing Date" + bookedDate);
-        
-        const currentDateTime = new Date();
-        startTime.setSeconds(0);
-        startTime.setMilliseconds(0);
-        endTime.setSeconds(0);
-        endTime.setMilliseconds(0);
+      
+      let bookedDate: Date = new Date(bookedDateValue);
+      let startTime: Date = Convert24hrTimeStringToDateTime(startTimeValue);
+      let endTime: Date = Convert24hrTimeStringToDateTime(endTimeValue);
+      
+      const currentDateTime = new Date();
+      startTime.setSeconds(0);
+      startTime.setMilliseconds(0);
+      endTime.setSeconds(0);
+      endTime.setMilliseconds(0);
         
       if( bookedDate.getDate() === currentDateTime.getDate() && startTime.getTime() < currentDateTime.getTime() ){
         return {startTime: "Please, select start time greater than current time."}
-      }
-      
-      if(endTime.getHours() < 10 || endTime.getHours() > 16){
-        return {endTime: "Booking opens from 10 AM - 4 PM."}
       }
       
       if(endTime.getHours() < startTime.getHours()){
@@ -104,9 +100,9 @@ export const DateAndTimeValidator: ValidatorFn = (control: AbstractControl): Val
       if (startTime.getHours() === endTime.getHours() && endTime.getMinutes() < startTime.getMinutes()){
         return {endTime: "End time can't be less than start time."}
       }
-  
+      
       if((endTime.getTime() - startTime.getTime())/60000 < 30){
-        return {time: "The booking duration should be atleast 30 min."}
+        return {endTime: "The booking duration should be atleast 30 min."}
       }
     }
     return null;
