@@ -22,8 +22,27 @@
                 
                 <div class="input-field end-field">
                     <label>Booking Date</label>
-                    <input type="date" class="form-control" formControlName= "bookingDate" min="{{minDate}}" max="{{maxDate}}" value="{{minDate}}">
-                    <span class="text-danger" *ngIf="bookingForm.controls['bookingDate'].invalid  && (bookingForm.controls['bookingDate'].dirty || bookingForm.controls['bookingDate'].touched)">
+                    
+                    <input type="text"
+                        class="form-control" 
+                        bsDatepicker
+                        [bsConfig]=
+                            "{ 
+                                isAnimated: true,
+                                containerClass: 'theme-red'
+                            }"
+                        [minDate]="minDate"
+                        [maxDate]="maxDate"
+                        [daysDisabled]="[6,0]"   
+                        (keypress)="false" 
+                        formControlName="bookingDate"                    
+                    >
+
+                    <span class="text-danger" 
+                        *ngIf="bookingForm.controls['bookingDate'].invalid  && 
+                        (bookingForm.controls['bookingDate'].dirty || 
+                        bookingForm.controls['bookingDate'].touched)"
+                    >
                         {{GetErrorMessage("bookingDate")}}
                     </span>
                 </div>
@@ -32,8 +51,21 @@
             <div class="row">
                 <div class="input-field">
                     <label>Start Time</label>
-                    <input type="time" class="form-control" formControlName= "startTime">
-                    <span class="text-danger" *ngIf="bookingForm.controls['startTime'].invalid  && (bookingForm.controls['startTime'].dirty || bookingForm.controls['startTime'].touched)">
+                    <timepicker 
+                        [min]="minStartTime" 
+                        [max]="maxStartTime"
+                        [minuteStep]="30"
+                        formControlName="startTime"
+                    >
+                    </timepicker>
+
+                    <span 
+                        class="text-danger" 
+                        *ngIf=
+                            "bookingForm.controls['startTime'].invalid  && 
+                            (bookingForm.controls['startTime'].dirty || 
+                            bookingForm.controls['startTime'].touched)"
+                    >
                         {{GetErrorMessage("startTime")}}
                     </span>
                     <span class="text-danger" *ngIf="bookingForm.errors?.['startTime']">
@@ -43,7 +75,13 @@
                 
                 <div class="input-field end-field">
                     <label>End Time</label>
-                    <input type="time" class="form-control" formControlName ="endTime">
+                    <timepicker 
+                        [min]="minEndTime" 
+                        [max]="maxEndTime"
+                        [minuteStep]="30"
+                        formControlName="endTime"
+                    >
+                    </timepicker>
                     <span class="text-danger" *ngIf="bookingForm.controls['endTime'].invalid  && (bookingForm.controls['endTime'].dirty || bookingForm.controls['endTime'].touched)">
                         {{GetErrorMessage("endTime")}}
                     </span>
@@ -52,7 +90,6 @@
                     </span>
                 </div>
             </div>
-
             <div class="book-btn-content">
                 <input (click)="Book()" type="button" class="book-btn" value="Book" >
             </div>

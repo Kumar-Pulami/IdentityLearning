@@ -21,4 +21,8 @@ export class SessionStorageService {
     RemoveAll(){
         sessionStorage.clear();
     }
+
+    GetUserId(){
+        return this.Get('userId');
+    }
 }

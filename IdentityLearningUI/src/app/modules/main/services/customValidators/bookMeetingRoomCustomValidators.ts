@@ -14,12 +14,8 @@ export function SelecteMeetingRoomValidator(): ValidatorFn {
 export function BookingDateValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const formControlValue = control.value;
-      const date_regex = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
       if(formControlValue === null || formControlValue === undefined){
         return {msg: "Please, select the booking Date."};
-      }
-      if(!date_regex.test(formControlValue)){        
-        return {msg: "Invalid date format. Use MM/DD/YYYY"}
       }
       return null;
     };
@@ -29,15 +25,10 @@ export function StartTimeValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const formControlValue = control.value;      
       if(formControlValue === null  || formControlValue === undefined){
-        return {msg: "Please, enter the start time."}
+        return {msg: "Invalid date format."}
       }
-
-      let startTime = Convert24hrTimeStringToDateTime(formControlValue);
-      console.log(startTime);
-
       
-      
-      if(startTime.getHours() < 10 || (startTime.getHours() === 15 && startTime.getMinutes() > 30 ) || startTime.getHours() > 15){
+      if(formControlValue.getHours() < 10 || (formControlValue.getHours() === 15 && formControlValue.getMinutes() > 30 ) || formControlValue.getHours() > 15){
         return {msg: "Booking start time start from 10 AM - 3:30 PM."}
       }
       return null;
@@ -49,12 +40,10 @@ export function EndTimeValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const formControlValue = control.value;      
       if(formControlValue === null  || formControlValue === undefined){
-        return {msg: "Please, enter the end time."}
+        return {msg: "Invalid date format."}
       }
 
-      let endTime = Convert24hrTimeStringToDateTime(formControlValue);
-      
-      if((endTime.getHours() === 10 && endTime.getMinutes() < 30) || endTime.getHours() < 10 ||endTime.getHours() > 16 || (endTime.getHours() === 16 && endTime.getMinutes() > 0)){
+      if((formControlValue.getHours() === 10 && formControlValue.getMinutes() < 30) || formControlValue.getHours() < 10 ||formControlValue.getHours() > 16 || (formControlValue.getHours() === 16 && formControlValue.getMinutes() > 0)){
         return {msg: "Booking end time start from 10:30 AM - 4 PM."}
       }
       return null;
@@ -63,13 +52,13 @@ export function EndTimeValidator(): ValidatorFn {
 
 
 export const DateAndTimeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
-    const bookedDateValue: Date = control.get('bookingDate')?.value;
-    const startTimeValue = control.get('startTime')?.value;
-    const endTimeValue = control.get('endTime')?.value;
+    const bookedDate: Date = control.get('bookingDate')?.value;
+    const startTime = control.get('startTime')?.value;
+    const endTime = control.get('endTime')?.value;
   
     let flag:boolean = false;
   
-    if( bookedDateValue === null || bookedDateValue ===undefined || startTimeValue === null || startTimeValue ===undefined || endTimeValue === null || endTimeValue ===undefined ){
+    if( bookedDate === null || bookedDate ===undefined || startTime === null || startTime ===undefined || endTime === null || endTime ===undefined ){
       flag = true;
     }
 
@@ -78,11 +67,6 @@ export const DateAndTimeValidator: ValidatorFn = (control: AbstractControl): Val
     }
     
     if(!flag){
-      
-      let bookedDate: Date = new Date(bookedDateValue);
-      let startTime: Date = Convert24hrTimeStringToDateTime(startTimeValue);
-      let endTime: Date = Convert24hrTimeStringToDateTime(endTimeValue);
-      
       const currentDateTime = new Date();
       startTime.setSeconds(0);
       startTime.setMilliseconds(0);
@@ -107,13 +91,3 @@ export const DateAndTimeValidator: ValidatorFn = (control: AbstractControl): Val
     }
     return null;
 };
-
-
-function Convert24hrTimeStringToDateTime(timeString: string): Date{
-    let [hour, minute] = timeString.split(':');
-    let time: Date = new Date();
-    time.setHours(parseInt(hour));
-    time.setMinutes(parseInt(minute));
-    return time;
-}
-

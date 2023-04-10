@@ -49,11 +49,23 @@
                 }
             }
 
+            .message-content{
+                margin-top: 30px;
+                margin-bottom: -25px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                strong{
+                    margin-right: 6px;
+                }
+            }
+
             .book-btn-content{
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                margin-top: 50px;
+                margin-top: 35px;
 
                 .book-btn{
                     width: 45%;

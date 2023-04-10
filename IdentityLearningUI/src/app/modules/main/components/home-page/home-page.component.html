@@ -19,11 +19,6 @@
         <label class="menu-name">Dashboard</label>
       </div>
 
-      <div routerLink="/MeetingRoom" class="nav-menu" (click)="SelectNavMenu('MeetingRoom')"  [ngClass]="selectedNavMenu === 'MeetingRoom' ? 'selected ' : '' " >
-        <i class="fa-regular fa-screen-users"></i>
-        <label class="menu-name">Meeting Room</label>
-      </div>
-
       <div routerLink="/BookMeetingRoom" class="nav-menu" (click)="SelectNavMenu('Booking')"  [ngClass]="selectedNavMenu === 'Booking' ? 'selected ' : '' " >
         <i class="fa-regular fa-screen-users"></i>
         <label class="menu-name">Booking</label>
@@ -33,10 +28,19 @@
   </div>
 
   <div class="body">
-
     <div class="body-header">
-      <div class="profile">
+      <div class="profile" 
+        #profileMenuTrigger = "matMenuTrigger" 
+        [matMenuTriggerFor]="profileMenu" 
+        (mouseenter)="profileMenuTrigger.openMenu()"      
+      >
         <i class="fa-regular fa-user"></i>
+        <mat-menu #profileMenu="matMenu" xPosition="before" backdropClass="profile-Menu">
+          <button class="profile-menu-btn" mat-menu-item (click)="Logout()">
+            <i class="fa-regular fa-right-from-bracket"></i>
+            <span>Log out</span>
+          </button>
+        </mat-menu>
       </div>  
     </div>
 

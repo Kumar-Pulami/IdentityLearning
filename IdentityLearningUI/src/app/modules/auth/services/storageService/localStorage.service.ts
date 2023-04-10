@@ -21,4 +21,8 @@ export class LocalStorageService {
     RemoveAll(){
         localStorage.clear();
     }
+
+    GetUserId(){
+        return this.Get('userId');
+    }
 }

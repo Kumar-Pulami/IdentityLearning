@@ -1,0 +1,29 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\Learning\\IdentityLearning\\IdentityLearningAPI\\wwwroot\\EmailHTMLTemplete\\ForgotPasswordTemplate.html",
+      "PackagePath": "staticwebassets\\EmailHTMLTemplete\\ForgotPasswordTemplate.html"
+    },
+    {
+      "Id": "D:\\Learning\\IdentityLearning\\IdentityLearningAPI\\wwwroot\\EmailHTMLTemplete\\InvitationTemplate.html",
+      "PackagePath": "staticwebassets\\EmailHTMLTemplete\\InvitationTemplate.html"
+    },
+    {
+      "Id": "obj\\Release\\net7.0\\staticwebassets\\msbuild.IdentityLearningAPI.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Release\\net7.0\\staticwebassets\\msbuild.build.IdentityLearningAPI.props",
+      "PackagePath": "build\\IdentityLearningAPI.props"
+    },
+    {
+      "Id": "obj\\Release\\net7.0\\staticwebassets\\msbuild.buildMultiTargeting.IdentityLearningAPI.props",
+      "PackagePath": "buildMultiTargeting\\IdentityLearningAPI.props"
+    },
+    {
+      "Id": "obj\\Release\\net7.0\\staticwebassets\\msbuild.buildTransitive.IdentityLearningAPI.props",
+      "PackagePath": "buildTransitive\\IdentityLearningAPI.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "Hash": "tNXkKuOhBwlXn7XOB5p43kya4ilgiZzzJbMEVhg07ts=",
+  "Source": "IdentityLearningAPI",
+  "BasePath": "_content/IdentityLearningAPI",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "IdentityLearningAPI\\wwwroot",
+      "Source": "IdentityLearningAPI",
+      "ContentRoot": "D:\\Learning\\IdentityLearning\\IdentityLearningAPI\\wwwroot\\",
+      "BasePath": "_content/IdentityLearningAPI",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "D:\\Learning\\IdentityLearning\\IdentityLearningAPI\\wwwroot\\EmailHTMLTemplete\\ForgotPasswordTemplate.html",
+      "SourceId": "IdentityLearningAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Learning\\IdentityLearning\\IdentityLearningAPI\\wwwroot\\",
+      "BasePath": "_content/IdentityLearningAPI",
+      "RelativePath": "EmailHTMLTemplete/ForgotPasswordTemplate.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\EmailHTMLTemplete\\ForgotPasswordTemplate.html"
+    },
+    {
+      "Identity": "D:\\Learning\\IdentityLearning\\IdentityLearningAPI\\wwwroot\\EmailHTMLTemplete\\InvitationTemplate.html",
+      "SourceId": "IdentityLearningAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Learning\\IdentityLearning\\IdentityLearningAPI\\wwwroot\\",
+      "BasePath": "_content/IdentityLearningAPI",
+      "RelativePath": "EmailHTMLTemplete/InvitationTemplate.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\EmailHTMLTemplete\\InvitationTemplate.html"
+    }
+  ]
+}

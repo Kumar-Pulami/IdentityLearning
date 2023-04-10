@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from "@angular/router";
-import { ForgotPasswordComponent } from "../components/forgot-password/forgot-password.component";
 
 @Injectable({
     providedIn: 'root'

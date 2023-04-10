@@ -9,6 +9,9 @@ import { NavbarServices } from './services/navBarServices/navBarService.service'
 import { BookMeetingRoomComponent } from './components/book-meeting-room/book-meeting-room.component';
 import { MeetingRoomApiService } from './services/apiServices/meetingRoomApiService.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { TimepickerModule } from 'ngx-bootstrap/timepicker';
+import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -21,7 +24,10 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     MainRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BsDatepickerModule.forRoot(),
+    TimepickerModule,
+    MatMenuModule    
   ],
 
   providers: [

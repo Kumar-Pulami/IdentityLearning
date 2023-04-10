@@ -206,41 +206,6 @@ namespace IdentityLearningAPI.Controllers
         }
 
 
-        [HttpPost("inviteNewUserByEmail")]
-        public async Task<IActionResult> InviteNewUserByEmail([FromBody] InviteNewUserDTO newUser)
-        {
-
-            string emailAddressRegex = @"^[^@\s]+@[^@\s]+\.(com|net|org|gov|io|edu)$";
-            if (!Regex.IsMatch(newUser.Email, emailAddressRegex, RegexOptions.IgnoreCase))
-            {
-                return BadRequest(new Response
-                {
-                    Success = false,
-                    Error = new List<string>
-                    {
-                        "Invalid Email Format"
-                    }
-                });
-            }
-
-            User existingUser = await _userManager.FindByEmailAsync(newUser.Email);
-            if (existingUser != null)
-            {
-                return BadRequest(new Response
-                {
-                    Success = false,
-                    Error = new List<string>
-                    {
-                        "Email already exists."
-                    }
-                });
-            }
-            await _mailSenderService.SendNewUserInvitationMail(newUser.Name, newUser.Email, "lksjdfasdf");
-
-            return Ok();
-        }
-
-
         [HttpGet("checkUniqueEmail")]
         public async Task<IActionResult> CheckUniqueEmail(string email)
         {   
@@ -315,20 +280,30 @@ namespace IdentityLearningAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                bool IsValid = await ValidateToken(newPassword.Email, newPassword.Token, TokenType.ForgotPassword);
-                if (IsValid)
+                //bool IsValid = await ValidateToken(newPassword.Email, newPassword.Token, TokenType.ForgotPassword);
+                //if (IsValid)
+                //{
+                //    User? existingUser = await _userManager.FindByEmailAsync(newPassword.Email);
+                //    await _userManager.RemovePasswordAsync(existingUser);
+                //    await _userManager.AddPasswordAsync(existingUser, newPassword.Password);
+                //    await _userManager.UpdateAsync(existingUser);
+
+                //    newPassword.Token = newPassword.Token.Replace(" ", "+");
+                //    UserToken? existingUserToken = await _dbContext.UserTokens.FirstOrDefaultAsync(x => x.UserId == existingUser.Id && x.Token == newPassword.Token );
+                //    existingUserToken.IsUsed = true;
+                //    _dbContext.UserTokens.Update(existingUserToken);
+                //    _dbContext.SaveChanges();
+
+                //    return Ok(new Response
+                //    {
+                //        Success = true,
+                //    });
+                //}
+                
+                newPassword.Token = newPassword.Token.Replace(" ", "+");
+                var result = await _userManager.ResetPasswordAsync(await _userManager.FindByEmailAsync(newPassword.Email), newPassword.Token, newPassword.Password);
+                if (result.Succeeded)
                 {
-                    User? existingUser = await _userManager.FindByEmailAsync(newPassword.Email);
-                    await _userManager.RemovePasswordAsync(existingUser);
-                    await _userManager.AddPasswordAsync(existingUser, newPassword.Password);
-                    await _userManager.UpdateAsync(existingUser);
-
-                    newPassword.Token = newPassword.Token.Replace(" ", "+");
-                    UserToken? existingUserToken = await _dbContext.UserTokens.FirstOrDefaultAsync(x => x.UserId == existingUser.Id && x.Token == newPassword.Token );
-                    existingUserToken.IsUsed = true;
-                    _dbContext.UserTokens.Update(existingUserToken);
-                    _dbContext.SaveChanges();
-
                     return Ok(new Response
                     {
                         Success = true,
@@ -400,13 +375,6 @@ namespace IdentityLearningAPI.Controllers
             };
         }
 
-
-        private DateTime UnixEpochTimeToDateTime(long unixEpochTime)
-        {
-            return new DateTime(1970,1,1).Add(TimeSpan.FromSeconds(unixEpochTime));
-        }
-
-
         private Response ReturnInvalidTokenResponse()
         {
             return new Response
@@ -428,7 +396,6 @@ namespace IdentityLearningAPI.Controllers
             }
             else
             {
-                //DateTime test = DateTime.UtcNow;
                 token = token.Replace(" ", "+");
                 UserToken? userToken = await _dbContext.UserTokens.FirstOrDefaultAsync(x => 
                     x.UserId == existingUser.Id && 
@@ -445,5 +412,79 @@ namespace IdentityLearningAPI.Controllers
             }
         }
 
+        [HttpPost("registerInvitedUser")]
+        public async Task<IActionResult> RegisterInvitedUser([FromBody] RegisterInvitedNewUserDTO invitedNewUserInfo)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new Response
+                {
+                    Success = false,
+                    Error = new List<string>
+                    {
+                        "Invalid data input"
+                    }
+                });
+            }
+
+            User? existingNewUser = await _userManager.FindByEmailAsync(invitedNewUserInfo.Email);
+            if(existingNewUser != null)
+            {
+                return BadRequest(new Response
+                {
+                    Success = false,
+                    Error = new List<string>
+                    {
+                        $"User with {invitedNewUserInfo.Email} already exists."    
+                    }
+                });
+            }
+            invitedNewUserInfo.InvitationToken = invitedNewUserInfo.InvitationToken.Replace(" ", "+");
+            NewUserInvitation? existingNewUserInvaitation = await _dbContext.NewUserInvitations.
+                                                                FirstOrDefaultAsync(x => 
+                                                                    x.Email == invitedNewUserInfo.Email &&
+                                                                    x.Name == invitedNewUserInfo.Name &&
+                                                                    x.InvitationToken == invitedNewUserInfo.InvitationToken &&
+                                                                    x.IsUsed == false &&
+                                                                    x.IsRevoked == false &&
+                                                                    x.TokenExpiration > DateTime.UtcNow
+                                                                );
+            if (existingNewUserInvaitation == null)
+            {
+                return BadRequest(new Response
+                {
+                    Success = false,
+                    Error = new List<string>
+                    {
+                        "Either token is expired or invalid."
+                    }
+                });
+            }
+
+            User newUser = new User()
+            {
+                Name = invitedNewUserInfo.Name,
+                UserName = invitedNewUserInfo.Email,
+                Email = invitedNewUserInfo.Email,
+                PhoneNumber = invitedNewUserInfo.PhoneNumber.ToString()
+            };
+
+            IdentityResult result = await _userManager.CreateAsync(newUser, invitedNewUserInfo.Password);
+            if (result.Succeeded)
+            {
+                return Ok(await GenerateToken(user: newUser));
+            }
+            else
+            {
+                return BadRequest(new Response
+                {
+                    Success = false,
+                    Error = new List<string>
+                    {
+                        "Something went wrong. Try Again."
+                    }
+                });
+            }
+        }
     }
 }

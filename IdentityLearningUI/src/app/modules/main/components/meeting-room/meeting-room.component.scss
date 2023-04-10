@@ -1,0 +1,24 @@
+@import 'variables';
+
+
+.meeting-room-content{
+    display: flex;
+    flex-direction: column;
+
+    .title{
+        font-size: 25px;
+        font-weight: 600;
+        margin-top: 25px;
+    }
+
+    .content{
+        margin-top: 20px;
+        border-radius: 5px;
+        background-color: #fff;
+        border: $thin-black-boarder;
+        border-radius: 10px;
+        box-shadow: $content-box-shadow;
+        padding: 40px 40px;
+        height: 70vh;
+    }
+}        

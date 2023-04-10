@@ -1,8 +1,13 @@
 ﻿using IdentityLearningAPI.ApplicationDbContext;
 using IdentityLearningAPI.Models;
+using IdentityLearningAPI.Models.DTO;
+using IdentityLearningAPI.Models.DTO.Response;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.ComponentModel;
 
 namespace IdentityLearningAPI.Controllers
 {
@@ -13,7 +18,7 @@ namespace IdentityLearningAPI.Controllers
     public class MeetingRoomController : ControllerBase
     {
         public readonly ApplicationDatabaseContext _databaseContext;
-
+         
         public MeetingRoomController(ApplicationDatabaseContext databaseContext)
         {
             _databaseContext = databaseContext;
@@ -71,9 +76,70 @@ namespace IdentityLearningAPI.Controllers
 
 
         [HttpPost("bookMeetingRoom")]
-        public async Task<IActionResult> BookMeetingRoom()
+        public async Task<IActionResult> BookMeetingRoom([FromBody] BookMeetingRoomDTO bookingInformation)
         {
-            return Ok();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(error: "Invalid Data.");
+            }
+
+            bool isAvailable = await CheckRoomAvailability(bookingInformation);
+            if (!isAvailable)
+            {                
+                return Ok(new Response()
+                {
+                    Success = false,
+                    Error = new List<string>{
+                        "The proposed booking is already booked."
+                    }
+                });
+            }
+
+            MeetingRoomBooking newBooking = new MeetingRoomBooking()
+            {
+                Id = new Guid(),
+                MeetingRoomId = bookingInformation.MeetingRoomId,
+                UserId = bookingInformation.UserId,
+                BookedDate = bookingInformation.BookedDate,
+                StartTime = bookingInformation.StartTime,
+                EndTime = bookingInformation.EndTime
+            };
+
+            _databaseContext.MeetingRoomBookings.Add(newBooking);
+            await _databaseContext.SaveChangesAsync();
+
+            return Ok(new Response()
+            {
+                Success = true
+            });
+        }
+
+
+        private async Task<bool> CheckRoomAvailability(BookMeetingRoomDTO bookingInformation)
+        {
+           List<MeetingRoomBooking>? existingBookingList = await _databaseContext.MeetingRoomBookings
+                .Where(x =>
+                          x.MeetingRoomId == bookingInformation.MeetingRoomId &&
+                          x.BookedDate.Date == bookingInformation.BookedDate.Date
+                      ).ToListAsync();
+
+            if (existingBookingList != null)
+            {
+                MeetingRoomBooking? existingBooking = existingBookingList
+                    .Where(x =>
+                            TimeOnly.FromDateTime(bookingInformation.StartTime) >= TimeOnly.FromDateTime(x.StartTime) && 
+                            TimeOnly.FromDateTime(bookingInformation.StartTime) < TimeOnly.FromDateTime(x.EndTime) ||
+                            TimeOnly.FromDateTime(bookingInformation.EndTime) > TimeOnly.FromDateTime(x.StartTime) && 
+                            TimeOnly.FromDateTime(bookingInformation.EndTime) <= TimeOnly.FromDateTime(x.EndTime) ||
+                            TimeOnly.FromDateTime(bookingInformation.StartTime) <= TimeOnly.FromDateTime(x.StartTime) && 
+                            TimeOnly.FromDateTime(bookingInformation.EndTime) >= TimeOnly.FromDateTime(x.EndTime)
+                    ).FirstOrDefault();
+                if (existingBooking != null)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

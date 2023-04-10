@@ -27,5 +27,6 @@ namespace IdentityLearningAPI.ApplicationDbContext
         public DbSet<MeetingRoom> MeetingRooms { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<UserToken> UserTokens { get; set; }
+        public DbSet<NewUserInvitation> NewUserInvitations { get; set; }
     }
 }

@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthInterceptor } from './modules/auth/interceptor/auth.interceptor';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -15,10 +16,17 @@ import { AuthInterceptor } from './modules/auth/interceptor/auth.interceptor';
   
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    ToastrModule.forRoot({
+      progressBar: true,
+      progressAnimation: 'increasing',
+      closeButton: true,
+      preventDuplicates: true,
+      resetTimeoutOnDuplicate: true,
+    })
   ],
 
   providers: [{

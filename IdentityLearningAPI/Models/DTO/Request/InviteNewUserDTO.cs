@@ -13,5 +13,6 @@ namespace IdentityLearningAPI.Models.DTO.Request
         [Required]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+
     }
 }

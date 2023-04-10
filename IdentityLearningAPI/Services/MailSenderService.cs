@@ -1,14 +1,12 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Mail;
-using System.Runtime.InteropServices;
 using IdentityLearningAPI.Configurations.MailConfig;
 using IdentityLearningAPI.Interfaces;
 using IdentityLearningAPI.Models;
 using IdentityLearningAPI.Models.DTO;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using Microsoft.AspNetCore.Hosting;
 
 namespace IdentityLearningAPI.Services
 {

@@ -1,0 +1,36 @@
+@import 'variables';
+.cdk-overlay-container:has(.profile-menu-btn) {
+    .profile-menu-btn {
+        width: 175px;
+        padding-left: 22px;
+        margin: 0px 10px;
+        border-radius: 5px;
+
+        i{
+            font-size: 20px;
+            font-weight: 400;
+            margin-right: 10px;
+        }
+        span{
+            font-size: 18px;
+            font-weight: 400;
+        }
+    }
+
+
+    .profile-menu-btn:hover {
+        background-color: $primary-color;
+
+        i{
+            font-size: 21px;
+            font-weight: 600;
+            color: white
+        }
+        
+        span{
+            font-size: 20;
+            font-weight: 500;
+            color: white
+        }
+    }
+}

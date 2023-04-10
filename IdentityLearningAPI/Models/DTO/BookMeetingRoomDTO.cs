@@ -10,12 +10,12 @@ namespace IdentityLearningAPI.Models.DTO
         [Required]
         public int MeetingRoomId { get; set; }
 
-        public String MeetingRoomName { get; set; }
+        public String? MeetingRoomName { get; set; }
 
         [Required]
         public string UserId { get; set; }
 
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
 
         [Required]
         public DateTime BookedDate { get; set; }
