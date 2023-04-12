@@ -3,11 +3,26 @@
         <span class="title">Dashboard</span>
 
         <div class="book-btn-content">
-            <input routerLink="/BookMeetingRoom" class="book-btn" type="button" value="Book Meeting Room">
+            <input routerLink="/MeetingRoomBookings" class="book-btn" type="button" value="Book Meeting Room">
         </div>
     </div>
 
-    <div class="content">
-
+    <div class="meeting-room-content">
+        <div class="meeting-room-title">
+            <span>Meeting Rooms</span>
+        </div>
+        <div class="meeting-room-card-content">
+            <div class="meeting-room-card" *ngFor="let individualMeetingRoom of bookings">
+                <div class="head">
+                    <span class="title">{{individualMeetingRoom.meetingRoomName}}</span>
+                </div>
+                <div class="body">
+                    <div class="body-content" *ngFor="let booking of individualMeetingRoom.bookings">
+                        <span class="user-name"><i class="fa-regular fa-user-clock"></i>{{booking.userName}}</span>
+                        <span class="book-date-time"><i class="fa-regular fa-calendar-clock"></i>{{booking.bookedDate | date :  'dd MMM YYYY'}}, {{booking.startTime +'Z'| date : 'hh:mm a'}} - {{booking.endTime +'Z' | date : 'hh:mm a'}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

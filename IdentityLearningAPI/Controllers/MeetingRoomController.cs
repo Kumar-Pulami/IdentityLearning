@@ -24,7 +24,6 @@ namespace IdentityLearningAPI.Controllers
             _databaseContext = databaseContext;
         }
 
-
         [HttpPost("createMeetingRoom")]
         public IActionResult CreateMeetingRoom([FromBody] string meetingRoomName)
         {
@@ -54,7 +53,9 @@ namespace IdentityLearningAPI.Controllers
         [HttpGet("getAllMeetingRooms")]
         public IActionResult GetAllMeetingRooms()
         {
-            var meetingRooms = _databaseContext.MeetingRooms.ToList();
+            var meetingRooms = _databaseContext.MeetingRooms.
+                Where(x => x.IsDeleted == false).
+                ToList();
             return Ok(meetingRooms);
         }
 
@@ -86,9 +87,10 @@ namespace IdentityLearningAPI.Controllers
             bool isAvailable = await CheckRoomAvailability(bookingInformation);
             if (!isAvailable)
             {                
-                return Ok(new Response()
+                return Ok(new Response<string>()
                 {
                     Success = false,
+                    Payload = null,
                     Error = new List<string>{
                         "The proposed booking is already booked."
                     }
@@ -108,9 +110,10 @@ namespace IdentityLearningAPI.Controllers
             _databaseContext.MeetingRoomBookings.Add(newBooking);
             await _databaseContext.SaveChangesAsync();
 
-            return Ok(new Response()
+            return Ok(new Response<string>()
             {
-                Success = true
+                Success = true,
+                Payload = null
             });
         }
 
@@ -120,7 +123,8 @@ namespace IdentityLearningAPI.Controllers
            List<MeetingRoomBooking>? existingBookingList = await _databaseContext.MeetingRoomBookings
                 .Where(x =>
                           x.MeetingRoomId == bookingInformation.MeetingRoomId &&
-                          x.BookedDate.Date == bookingInformation.BookedDate.Date
+                          x.BookedDate.Date == bookingInformation.BookedDate.Date &&
+                          x.IsDeleted == false
                       ).ToListAsync();
 
             if (existingBookingList != null)

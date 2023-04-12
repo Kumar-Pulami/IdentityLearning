@@ -22,8 +22,6 @@ export class SetPasswordGuard implements CanActivate{
         debugger
         this.email= route.queryParams['email'];
         this.token= route.queryParams['token'];
-        console.log('asdfasdfsdfsdafdsf')
-        console.log(this.email, this.token)
         if(!this.email || !this.token){
             this.router.navigate(['/SignIn']);
             return false;

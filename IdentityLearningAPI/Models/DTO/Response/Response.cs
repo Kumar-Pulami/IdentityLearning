@@ -1,11 +1,15 @@
 ﻿using Microsoft.OpenApi.Any;
+using System.Diagnostics.CodeAnalysis;
 
 namespace IdentityLearningAPI.Models.DTO.Response
 {
-    public class Response
+    public class Response<T>
     {
         public bool Success { get; set; }
-        public AnyType? Payload { get; set; } = null;
+        
+        [AllowNull]
+        public T? Payload { get; set; }
+
         public List<string>? Error { get; set; } = null;  
     }
 }

@@ -37,9 +37,10 @@ namespace IdentityLearningAPI.Controllers
         public async Task<IActionResult> InviteNewUserByEmail([FromBody] InviteNewUserDTO newUser)
         {
             if (!ModelState.IsValid) {
-                return BadRequest(new Response
+                return BadRequest(new Response<string>
                 {
                     Success = false,
+                    Payload = null,
                     Error = new List<string>
                     {
                         "Invalid data input."
@@ -50,9 +51,10 @@ namespace IdentityLearningAPI.Controllers
             string emailAddressRegex = @"^[^@\s]+@[^@\s]+\.(com|net|org|gov|io|edu)$";
             if (!Regex.IsMatch(newUser.Email, emailAddressRegex, RegexOptions.IgnoreCase))
             {
-                return BadRequest(new Response
+                return BadRequest(new Response<string>
                 {
                     Success = false,
+                    Payload = null,
                     Error = new List<string>
                     {
                         "Invalid Email Format"
@@ -63,9 +65,10 @@ namespace IdentityLearningAPI.Controllers
             User? existingUser = await _userManager.FindByEmailAsync(newUser.Email);
             if (existingUser != null)
             {
-                return BadRequest(new Response
+                return BadRequest(new Response<string>
                 {
                     Success = false,
+                    Payload = null,
                     Error = new List<string>
                     {
                         "Email already exists."
@@ -101,9 +104,10 @@ namespace IdentityLearningAPI.Controllers
 
             await _mailSender.SendNewUserInvitationMail(newUser.Name, newUser.Email, newInvitationToken);
 
-            return Ok(new Response
+            return Ok(new Response<string>
             {
-                Success = true
+                Success = true,
+                Payload = null,
             });
         }
     }

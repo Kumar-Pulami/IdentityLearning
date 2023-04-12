@@ -1,7 +1,7 @@
 import { AnimationQueryMetadata } from "@angular/animations";
 
-export class Response{
+export class Response<T>{
     success: boolean;
-    payLoad: any;
+    payload: T | null | undefined;
     error: string[];
 }

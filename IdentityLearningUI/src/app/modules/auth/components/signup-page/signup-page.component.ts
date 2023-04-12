@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthResponse } from 'src/app/modules/auth/models/authResponse';
 import { SignUp } from 'src/app/modules/auth/models/sign-up/signUp';
 import { SignUpApiService } from 'src/app/modules/auth/apiServices/signup.service';
@@ -9,9 +9,7 @@ import { EmptyFormValidator } from 'src/app/modules/auth/services/customValidato
 import { GetValidationErrorMessage } from 'src/app/modules/auth/services/customValidators/getValidationErrorMessage';
 import { ContactNumberValidator, EmailValidator, MatchPasswordValidator, NameValidator, PasswordValidator } from 'src/app/modules/auth/services/customValidators/signUpFormValidators';
 import { InvitedSignUp } from '../../models/sign-up/invitedSignUp';
-import { Response } from 'src/app/domain model/response';
 import { ToastrService } from 'ngx-toastr';
-import { EventListenerFocusTrapInertStrategy } from '@angular/cdk/a11y';
 
 @Component({
   selector: 'app-signup-page',

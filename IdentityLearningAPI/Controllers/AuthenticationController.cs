@@ -180,9 +180,10 @@ namespace IdentityLearningAPI.Controllers
 
                     if (existingRefreshToken.ExpiredDateTime < currentDateTime)
                     {
-                        return BadRequest(new Response
+                        return BadRequest(new Response<string>
                         {
                             Success = false,
+                            Payload = null,
                             Error = new List<string>
                             {
                                 "Expired Refresh Token. Need relogin."
@@ -304,15 +305,16 @@ namespace IdentityLearningAPI.Controllers
                 var result = await _userManager.ResetPasswordAsync(await _userManager.FindByEmailAsync(newPassword.Email), newPassword.Token, newPassword.Password);
                 if (result.Succeeded)
                 {
-                    return Ok(new Response
+                    return Ok(new Response<string>
                     {
                         Success = true,
                     });
                 }
             }
-            return BadRequest(new Response()
+            return BadRequest(new Response<string>()
             {
                 Success = false,
+                Payload = null,
                 Error = new List<string> { "Invalid Token." }
             });
         }
@@ -375,11 +377,12 @@ namespace IdentityLearningAPI.Controllers
             };
         }
 
-        private Response ReturnInvalidTokenResponse()
+        private Response<string> ReturnInvalidTokenResponse()
         {
-            return new Response
+            return new Response<string>
             {
                 Success = false,
+                Payload = null,
                 Error = new List<string>
                 {
                     "Invalid Token"
@@ -417,9 +420,10 @@ namespace IdentityLearningAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new Response
+                return BadRequest(new Response<string>
                 {
                     Success = false,
+                    Payload = null,
                     Error = new List<string>
                     {
                         "Invalid data input"
@@ -430,9 +434,10 @@ namespace IdentityLearningAPI.Controllers
             User? existingNewUser = await _userManager.FindByEmailAsync(invitedNewUserInfo.Email);
             if(existingNewUser != null)
             {
-                return BadRequest(new Response
+                return BadRequest(new Response<string>
                 {
                     Success = false,
+                    Payload = null,
                     Error = new List<string>
                     {
                         $"User with {invitedNewUserInfo.Email} already exists."    
@@ -451,9 +456,10 @@ namespace IdentityLearningAPI.Controllers
                                                                 );
             if (existingNewUserInvaitation == null)
             {
-                return BadRequest(new Response
+                return BadRequest(new Response<string>
                 {
                     Success = false,
+                    Payload = null,
                     Error = new List<string>
                     {
                         "Either token is expired or invalid."
@@ -476,9 +482,10 @@ namespace IdentityLearningAPI.Controllers
             }
             else
             {
-                return BadRequest(new Response
+                return BadRequest(new Response<string>
                 {
                     Success = false,
+                    Payload = null,
                     Error = new List<string>
                     {
                         "Something went wrong. Try Again."

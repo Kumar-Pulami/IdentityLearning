@@ -94,8 +94,8 @@ export class BookMeetingRoomComponent {
       bookingInformation.bookedDate.setMinutes(0);
       bookingInformation.bookedDate.setSeconds(0);
 
-      this.httpClient.post<Response>(bookMeetingApiUrl, bookingInformation).subscribe({
-        next: (res: Response) =>{
+      this.httpClient.post<Response<null>>(bookMeetingApiUrl, bookingInformation).subscribe({
+        next: (res: Response<null>) =>{
           if(res.success){
             this.toastrService.success("The proposed booking has been booked.", "Success");
           }else{

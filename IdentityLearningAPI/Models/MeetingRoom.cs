@@ -11,5 +11,8 @@ namespace IdentityLearningAPI.Models
         [MinLength(5)]
         [MaxLength(50)]
         public string Name { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; } = false;
     }
 }

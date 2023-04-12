@@ -9,5 +9,8 @@ namespace IdentityLearningAPI.Models
         [MinLength(2)]
         [MaxLength(60)]
         public String Name { get; set; }
+
+        [Required]
+        public bool IsActive { get; set; }
     }
 }

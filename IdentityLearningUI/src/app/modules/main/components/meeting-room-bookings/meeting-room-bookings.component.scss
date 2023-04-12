@@ -1,7 +1,6 @@
 @import 'variables';
 
-
-.meeting-room-content{
+.booking-content{
     display: flex;
     flex-direction: column;
 
@@ -19,6 +18,5 @@
         border-radius: 10px;
         box-shadow: $content-box-shadow;
         padding: 40px 40px;
-        height: 70vh;
     }
 }        

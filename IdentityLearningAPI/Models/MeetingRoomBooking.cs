@@ -26,6 +26,9 @@ namespace IdentityLearningAPI.Models
         [DataType(DataType.Time)]
         public DateTime EndTime { get; set; }
 
+        [Required]
+        public bool IsDeleted { get; set; } = false;
+
         [ForeignKey("UserId")]
         public User User { get; set; }
 
